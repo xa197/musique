@@ -66,12 +66,6 @@
         #reveal-button:hover:not(:disabled) { background: linear-gradient(45deg, #00b8d4, var(--primary-color)); box-shadow: 0 0 8px var(--primary-color), 0 4px 8px rgba(0,0,0,0.5); }
         #lyrics-container { margin-top: 25px; padding: 20px; background-color: rgba(0,0,0,0.15); border-radius: 10px; min-height: 120px; font-size: 1.15em; border: 1px solid var(--input-border); box-shadow: inset 0 0 10px rgba(0,0,0,0.3); margin-bottom: 20px; }
         .lyric-line { margin-bottom: 15px; line-height: 1.8; padding: 8px 12px; border-radius: 8px; transition: all 0.3s ease-in-out; }
-        /* <!-- NOUVEAU STYLE POUR LA SYNCHRONISATION --> */
-        .lyric-line.active-line {
-            background-color: rgba(0, 255, 255, 0.1);
-            transform: scale(1.02);
-            box-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
-        }
         .lyric-word { display: inline-block; margin-right: 6px; vertical-align: baseline; }
         .lyric-gap { display: inline-block; margin-right: 6px; padding: 4px 6px; vertical-align: baseline; border: 1px solid var(--input-border); border-radius: 5px; font-size: 1em; min-width: 60px; background-color: var(--input-bg); color: var(--text-color); transition: all 0.3s ease; }
         .lyric-gap:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 8px var(--input-focus-glow); background-color: #2a2a4e; }
@@ -89,55 +83,10 @@
 
     <div id="main-app-area">
 
-        <div id="home-screen" class="screen active-screen">
-            <h1>Paroles Futuristes</h1>
-            <p>Apprenez une langue en musique !</p>
-            <button id="start-learning-button" class="nav-button">Commencer l'Apprentissage</button>
-        </div>
-
-        <div id="song-selection-screen" class="screen">
-            <h2>Choisissez une Chanson</h2>
-            <ul id="song-list"><li>Chargement des chansons...</li></ul>
-            <button id="back-to-home" class="nav-button" style="width: auto; display: inline-block; font-size: 0.9em; padding: 8px 15px; margin-top: 20px;">Retour Accueil</button>
-        </div>
-
-        <div id="player-screen" class="screen">
-            <h2 id="player-song-title">Titre de la Chanson</h2>
-            <button id="back-to-selection" class="nav-button" style="width: auto; display: inline-block; font-size: 0.9em; padding: 8px 15px; margin-bottom: 20px;">Changer Chanson</button>
-
-            <div id="media-player-container">
-                 <audio id="local-audio-player" controls></audio>
-            </div>
-
-            <div id="lyrics-container">
-                 <p class="info-text">Chargez une chanson et cliquez sur Play.</p>
-            </div>
-
-            <div id="score-area">Score: 0 / 0</div>
-
-            <div id="player-controls">
-                <div class="control-group">
-                     <label for="difficulty-slider">Niv:</label>
-                     <input type="range" id="difficulty-slider" min="1" max="10" value="5">
-                     <span id="difficulty-value">5</span>
-                     <label for="playback-rate-select" style="margin-left: 15px;">Vit:</label>
-                     <select id="playback-rate-select" title="Vitesse de lecture" disabled></select>
-                 </div>
-                 <div class="control-group">
-                    <button id="rewind10-button" class="control-button" disabled title="Reculer de 10s">-10s</button>
-                    <button id="rewind5-button" class="control-button" disabled title="Reculer de 5s">-5s</button>
-                    <button id="rewind3-button" class="control-button" disabled title="Reculer de 3s">-3s</button>
-                    <button id="play-button" class="control-button" disabled style="min-width: 60px;">Chargement...</button>
-                    <button id="forward3-button" class="control-button" disabled title="Avancer de 3s">+3s</button>
-                    <button id="forward5-button" class="control-button" disabled title="Avancer de 5s">+5s</button>
-                    <button id="forward10-button" class="control-button" disabled title="Avancer de 10s">+10s</button>
-                 </div>
-                 <div class="control-group">
-                    <button id="reveal-button" class="control-button" disabled title="Révéler mot">Révéler</button>
-                 </div>
-            </div>
-             <p class="info-text warning-text" style="margin-top: 15px;">Utilisez des fichiers audio dont vous avez les droits.</p>
-        </div>
+        <!-- ... Le HTML des écrans ne change pas ... -->
+        <div id="home-screen" class="screen active-screen"> <h1>Paroles Futuristes</h1> <p>Apprenez une langue en musique !</p> <button id="start-learning-button" class="nav-button">Commencer l'Apprentissage</button> </div>
+        <div id="song-selection-screen" class="screen"> <h2>Choisissez une Chanson</h2> <ul id="song-list"><li>Chargement des chansons...</li></ul> <button id="back-to-home" class="nav-button" style="width: auto; display: inline-block; font-size: 0.9em; padding: 8px 15px; margin-top: 20px;">Retour Accueil</button> </div>
+        <div id="player-screen" class="screen"> <h2 id="player-song-title">Titre de la Chanson</h2> <button id="back-to-selection" class="nav-button" style="width: auto; display: inline-block; font-size: 0.9em; padding: 8px 15px; margin-bottom: 20px;">Changer Chanson</button> <div id="media-player-container"> <audio id="local-audio-player" controls></audio> </div> <div id="lyrics-container"> <p class="info-text">Chargez une chanson et cliquez sur Play.</p> </div> <div id="score-area">Score: 0 / 0</div> <div id="player-controls"> <div class="control-group"> <label for="difficulty-slider">Niv:</label> <input type="range" id="difficulty-slider" min="1" max="10" value="5"> <span id="difficulty-value">5</span> <label for="playback-rate-select" style="margin-left: 15px;">Vit:</label> <select id="playback-rate-select" title="Vitesse de lecture" disabled></select> </div> <div class="control-group"> <button id="rewind10-button" class="control-button" disabled title="Reculer de 10s">-10s</button> <button id="rewind5-button" class="control-button" disabled title="Reculer de 5s">-5s</button> <button id="rewind3-button" class="control-button" disabled title="Reculer de 3s">-3s</button> <button id="play-button" class="control-button" disabled style="min-width: 60px;">Chargement...</button> <button id="forward3-button" class="control-button" disabled title="Avancer de 3s">+3s</button> <button id="forward5-button" class="control-button" disabled title="Avancer de 5s">+5s</button> <button id="forward10-button" class="control-button" disabled title="Avancer de 10s">+10s</button> </div> <div class="control-group"> <button id="reveal-button" class="control-button" disabled title="Révéler mot">Révéler</button> </div> </div> <p class="info-text warning-text" style="margin-top: 15px;">Utilisez des fichiers audio dont vous avez les droits.</p> </div>
     </div>
 
     <script>
@@ -145,27 +94,17 @@
           { 
             id: "shapeofyou-refrain", title: "Shape of You (Refrain)", artist: "Ed Sheeran",
             filePath: "https://cdn.jsdelivr.net/gh/xa197/musique@main/Ed%20Sheeran%20-%20Shape%20of%20You%20(Official%20Music%20Video).mp3", 
-            startTime: 48, 
-            endTime: 75,   
-            lyrics: [ 
-              { time: 0.5,  words: ["I'm", "in", "love", "with", "the", "shape", "of", "you"], translation: "Je suis amoureux de ta silhouette" },
-              { time: 3.5,  words: ["We", "push", "and", "pull", "like", "a", "magnet", "do"], translation: "On s'attire et se repousse comme des aimants" },
-              { time: 6.5,  words: ["Although", "my", "heart", "is", "falling", "too"], translation: "Même si mon cœur est en train de tomber aussi" },
-              { time: 9.0,  words: ["I'm", "in", "love", "with", "your", "body"], translation: "Je suis amoureux de ton corps" },
-              { time: 12.5, words: ["And", "last", "night", "you", "were", "in", "my", "room"], translation: "Et la nuit dernière tu étais dans ma chambre" },
-              { time: 15.5, words: ["And", "now", "my", "bedsheets", "smell", "like", "you"], translation: "Et maintenant mes draps sentent comme toi" },
-              { time: 18.5, words: ["Every", "day", "discovering", "something", "brand", "new"], translation: "Chaque jour je découvre quelque chose de tout nouveau" },
-              { time: 21.0, words: ["I'm", "in", "love", "with", "your", "body"], translation: "Je suis amoureux de ton corps" }
-            ]
+            startTime: 48, endTime: 75,   
+            lyrics: [ { time: 0.5,  words: ["I'm", "in", "love", "with", "the", "shape", "of", "you"], translation: "Je suis amoureux de ta silhouette" },{ time: 3.5,  words: ["We", "push", "and", "pull", "like", "a", "magnet", "do"], translation: "On s'attire et se repousse comme des aimants" },{ time: 6.5,  words: ["Although", "my", "heart", "is", "falling", "too"], translation: "Même si mon cœur est en train de tomber aussi" },{ time: 9.0,  words: ["I'm", "in", "love", "with", "your", "body"], translation: "Je suis amoureux de ton corps" },{ time: 12.5, words: ["And", "last", "night", "you", "were", "in", "my", "room"], translation: "Et la nuit dernière tu étais dans ma chambre" },{ time: 15.5, words: ["And", "now", "my", "bedsheets", "smell", "like", "you"], translation: "Et maintenant mes draps sentent comme toi" },{ time: 18.5, words: ["Every", "day", "discovering", "something", "brand", "new"], translation: "Chaque jour je découvre quelque chose de tout nouveau" },{ time: 21.0, words: ["I'm", "in", "love", "with", "your", "body"], translation: "Je suis amoureux de ton corps" }]
           },
-          // MODIFICATION: Chanson "Bad Liar" étendue jusqu'à la fin du premier refrain
+          // MODIFICATION: Chanson "Bad Liar" étendue jusqu'à la fin du deuxième refrain
           {
             id: "badliar-imaginedragons",
-            title: "Bad Liar (Verset 1 + Refrain 1)",
+            title: "Bad Liar (Jusqu'au 2ème Refrain)",
             artist: "Imagine Dragons",
             filePath: "https://cdn.jsdelivr.net/gh/xa197/musique@main/Imagine%20Dragons%20-%20Bad%20Liar.mp3",
             startTime: 11,
-            endTime: 70, // Fin de la section étendue à 1m10s
+            endTime: 125, // Fin de la section étendue à 2m05s
             lyrics: [
                 { time: 0.5,  words: ["Oh,", "hush,", "my", "dear,", "it's", "been", "a", "difficult", "year"], translation: "Oh, chut, ma chère, l'année a été difficile" },
                 { time: 4.5,  words: ["And", "terrors", "don't", "prey", "on", "innocent", "victims"], translation: "Et les terreurs ne s'attaquent pas aux victimes innocentes" },
@@ -181,8 +120,13 @@
                 { time: 45.0, words: ["I", "can't", "be", "what", "you", "want", "me", "to", "be"], translation: "Je ne peux pas être ce que tu veux que je sois" },
                 { time: 48.5, words: ["Believe", "me,", "this", "one", "time"], translation: "Crois-moi, cette fois-ci" },
                 { time: 52.0, words: ["Believe", "me"], translation: "Crois-moi" },
-                { time: 54.5, words: ["I'm", "a", "bad", "liar,", "bad", "liar"], translation: "Je suis un piètre menteur, un piètre menteur" },
-                { time: 58.5, words: ["Now", "you", "know,", "now", "you", "know"], translation: "Maintenant tu sais, maintenant tu sais" }
+                { time: 55.0, words: ["Did", "you", "check", "on", "me?"], translation: "As-tu pris de mes nouvelles ?" },
+                { time: 57.5, words: ["Now", "are", "you", "checking", "on", "me?"], translation: "Maintenant, est-ce que tu prends de mes nouvelles ?" },
+                { time: 101.5, words: ["I'm", "a", "man", "of", "my", "word,", "did", "I", "say", "that", "I", "love", "you?"], translation: "Je suis un homme de parole, ai-je dit que je t'aime ?" },
+                { time: 104.5, words: ["Did", "I", "promise", "you", "forever,", "my", "love?"], translation: "T'ai-je promis l'éternité, mon amour ?" },
+                { time: 107.0, words: ["So", "look", "me", "in", "the", "eyes,"], translation: "Alors regarde-moi dans les yeux,"},
+                { time: 110.0, words: ["Tell", "me", "what", "you", "see"], translation: "Dis-moi ce que tu vois"},
+                { time: 113.0, words: ["Perfect", "paradise,", "tearing", "at", "the", "seams"], translation: "Un paradis parfait, qui se déchire aux coutures" }
             ]
           }
         ];
@@ -193,6 +137,9 @@
         let totalGaps = 0;
         let correctGaps = 0;
         let gapsData = [];
+        // CORRECTION BUG: Ajout d'un drapeau pour éviter le re-rendu des paroles
+        let lyricsAreRendered = false;
+        
         const REWIND_SECONDS_10 = 10; const REWIND_SECONDS_5 = 5; const REWIND_SECONDS_3 = 3;
         const FORWARD_SECONDS_3 = 3; const FORWARD_SECONDS_5 = 5; const FORWARD_SECONDS_10 = 10;
         const MIN_WORD_LENGTH_FOR_GAP = 2;
@@ -232,7 +179,6 @@
 
         function populateSongList() {
             songListUl.innerHTML = '';
-            if (songsData.length === 0) { songListUl.innerHTML = '<li>Aucune chanson disponible.</li>'; return; }
             songsData.forEach(song => {
                 const li = document.createElement('li');
                 const button = document.createElement('button');
@@ -246,13 +192,12 @@
         }
 
         function loadAndShowPlayer(songId) {
-            // Désactiver la synchro de l'ancienne chanson si elle existe
-            if(localAudioPlayer) localAudioPlayer.removeEventListener('timeupdate', syncPlayerState);
+            // CORRECTION BUG: Réinitialiser le drapeau pour la nouvelle chanson
+            lyricsAreRendered = false; 
 
             currentSongId = songId;
             currentSongData = songsData.find(song => song.id === songId);
-
-            if (!currentSongData) { /* ... gestion erreur ... */ return; }
+            if (!currentSongData) return;
             
             showScreen('player-screen');
             playerSongTitle.textContent = `${currentSongData.title} - ${currentSongData.artist}`;
@@ -265,198 +210,79 @@
             [rewind10Button, rewind5Button, rewind3Button, forward3Button, forward5Button, forward10Button, revealButton, playbackRateSelect].forEach(btn => btn.disabled = true);
             
             difficultySlider.value = 5; 
-            updateDifficultyValue();
-
-            // Activer la synchro pour la nouvelle chanson
-            localAudioPlayer.addEventListener('timeupdate', syncPlayerState);
+            difficultyValueSpan.textContent = difficultySlider.value;
         }
 
         function prepareUiForSong() {
             if (!currentSongData) return;
-            playerSongTitle.textContent = `${currentSongData.title} - ${currentSongData.artist}`;
-            renderLyrics();
+            
+            // CORRECTION BUG: On ne dessine les paroles qu'une seule fois
+            if (!lyricsAreRendered) {
+                renderLyrics();
+            }
             resetScore();
         }
 
         function updateDifficultyValue() { 
             difficultyValueSpan.textContent = difficultySlider.value; 
-            if (currentSongData && localAudioPlayer && localAudioPlayer.readyState > 0) { renderLyrics(); resetScore(); } 
+            if (currentSongData && localAudioPlayer && localAudioPlayer.readyState > 0) {
+                renderLyrics(); // Ici on redessine volontairement pour changer la difficulté
+                resetScore();
+            } 
         }
 
         function renderLyrics() { 
             if (!currentSongData) return;
-            lyricsContainer.innerHTML = ''; 
-            gapsData = []; totalGaps = 0; 
+            lyricsAreRendered = true; // On indique que les paroles sont maintenant dessinées
+            
+            lyricsContainer.innerHTML = ''; gapsData = []; totalGaps = 0; 
             const difficulty = parseInt(difficultySlider.value, 10); 
             const potentialGaps = []; 
+            currentSongData.lyrics.forEach((line, lineIdx) => { line.words.forEach((word, wordIdx) => { const cleanWord = word.replace(/[.,!?;:'-]/g, ''); if (cleanWord.length >= MIN_WORD_LENGTH_FOR_GAP) { potentialGaps.push({ lineIdx, wordIdx, word, answer: cleanWord }); } }); });
+            const gapPercentage = 0.1 + (difficulty - 1) * (0.8 / 9); let targetNumberOfGaps = Math.round(potentialGaps.length * gapPercentage); targetNumberOfGaps = Math.max(1, Math.min(potentialGaps.length, targetNumberOfGaps)); 
+            const shuffledPotentialGaps = shuffleArray([...potentialGaps]); const selectedGapsInfo = shuffledPotentialGaps.slice(0, targetNumberOfGaps); const gapIndices = new Set(selectedGapsInfo.map(g => `${g.lineIdx}-${g.wordIdx}`)); totalGaps = gapIndices.size; 
             currentSongData.lyrics.forEach((line, lineIdx) => { 
-                line.words.forEach((word, wordIdx) => { 
-                    const cleanWord = word.replace(/[.,!?;:'-]/g, ''); 
-                    if (cleanWord.length >= MIN_WORD_LENGTH_FOR_GAP) { 
-                        potentialGaps.push({ lineIdx, wordIdx, word, answer: cleanWord }); 
-                    } 
-                }); 
-            }); 
-
-            const gapPercentage = 0.1 + (difficulty - 1) * (0.8 / 9); 
-            let targetNumberOfGaps = Math.round(potentialGaps.length * gapPercentage); 
-            targetNumberOfGaps = Math.max(1, Math.min(potentialGaps.length, targetNumberOfGaps)); 
-            
-            const shuffledPotentialGaps = shuffleArray([...potentialGaps]); 
-            const selectedGapsInfo = shuffledPotentialGaps.slice(0, targetNumberOfGaps); 
-            const gapIndices = new Set(selectedGapsInfo.map(g => `${g.lineIdx}-${g.wordIdx}`)); 
-            totalGaps = gapIndices.size; 
-
-            currentSongData.lyrics.forEach((line, lineIdx) => { 
-                const lineDiv = document.createElement('div'); 
-                lineDiv.classList.add('lyric-line'); 
-                lineDiv.dataset.lineIndex = lineIdx; 
+                const lineDiv = document.createElement('div'); lineDiv.classList.add('lyric-line'); lineDiv.dataset.lineIndex = lineIdx; 
                 line.words.forEach((word, wordIdx) => { 
                     const cleanWord = word.replace(/[.,!?;:'-]/g, ''); 
                     if (gapIndices.has(`${lineIdx}-${wordIdx}`)) { 
-                        const input = document.createElement('input'); 
-                        input.type = 'text'; 
-                        input.classList.add('lyric-gap'); 
-                        input.dataset.answer = cleanWord; 
-                        input.style.width = `${Math.max(60, cleanWord.length * 10)}px`; 
-                        input.setAttribute('autocomplete', 'off'); input.setAttribute('autocorrect', 'off');
-                        input.setAttribute('autocapitalize', 'off'); input.setAttribute('spellcheck', 'false'); 
-                        lineDiv.appendChild(input); 
-                        gapsData.push({ element: input, answer: cleanWord, lineEl: lineDiv }); 
-                        input.addEventListener('input', handleInputChange); 
-                        input.addEventListener('keypress', handleInputKeyPress); 
+                        const input = document.createElement('input'); input.type = 'text'; input.classList.add('lyric-gap'); input.dataset.answer = cleanWord; input.style.width = `${Math.max(60, cleanWord.length * 10)}px`; input.setAttribute('autocomplete', 'off'); input.setAttribute('autocorrect', 'off'); input.setAttribute('autocapitalize', 'off'); input.setAttribute('spellcheck', 'false'); 
+                        lineDiv.appendChild(input); gapsData.push({ element: input, answer: cleanWord, lineEl: lineDiv }); 
+                        input.addEventListener('input', handleInputChange); input.addEventListener('keypress', handleInputKeyPress); 
                     } else { 
-                        const wordSpan = document.createElement('span'); 
-                        wordSpan.classList.add('lyric-word'); 
-                        wordSpan.textContent = word; 
-                        lineDiv.appendChild(wordSpan); 
+                        const wordSpan = document.createElement('span'); wordSpan.classList.add('lyric-word'); wordSpan.textContent = word; lineDiv.appendChild(wordSpan); 
                     } 
                 }); 
-                const translationDiv = document.createElement('div'); 
-                translationDiv.classList.add('line-translation'); 
-                translationDiv.textContent = line.translation || ''; 
-                lineDiv.appendChild(translationDiv); 
+                const translationDiv = document.createElement('div'); translationDiv.classList.add('line-translation'); translationDiv.textContent = line.translation || ''; lineDiv.appendChild(translationDiv); 
                 lyricsContainer.appendChild(lineDiv); 
             }); 
             updateScoreDisplay(); 
         }
         
-        function togglePlayPause() {
-            if (!localAudioPlayer || !currentSongData) return;
-            if (localAudioPlayer.paused || localAudioPlayer.ended) {
-                if (localAudioPlayer.ended || (currentSongData.endTime && localAudioPlayer.currentTime >= currentSongData.endTime - 0.1)) {
-                    localAudioPlayer.currentTime = currentSongData.startTime || 0;
-                }
-                localAudioPlayer.play();
-            } else {
-                localAudioPlayer.pause();
-            }
-        }
-
-        function rewindVideo(seconds) {
-            if (localAudioPlayer && currentSongData) {
-                const newTime = localAudioPlayer.currentTime - seconds;
-                localAudioPlayer.currentTime = Math.max(currentSongData.startTime || 0, newTime);
-            }
-        }
-
-        function fastForwardVideo(seconds) {
-            if (localAudioPlayer && currentSongData) {
-                let newTime = localAudioPlayer.currentTime + seconds;
-                if (currentSongData.endTime) {
-                    newTime = Math.min(newTime, currentSongData.endTime);
-                } 
-                localAudioPlayer.currentTime = newTime;
-            }
-        }
+        function togglePlayPause() { if (!localAudioPlayer || !currentSongData) return; if (localAudioPlayer.paused || localAudioPlayer.ended) { if (localAudioPlayer.ended || (currentSongData.endTime && localAudioPlayer.currentTime >= currentSongData.endTime - 0.1)) { localAudioPlayer.currentTime = currentSongData.startTime || 0; } localAudioPlayer.play(); } else { localAudioPlayer.pause(); } }
+        function rewindVideo(seconds) { if (localAudioPlayer && currentSongData) { const newTime = localAudioPlayer.currentTime - seconds; localAudioPlayer.currentTime = Math.max(currentSongData.startTime || 0, newTime); } }
+        function fastForwardVideo(seconds) { if (localAudioPlayer && currentSongData) { let newTime = localAudioPlayer.currentTime + seconds; if (currentSongData.endTime) { newTime = Math.min(newTime, currentSongData.endTime); } localAudioPlayer.currentTime = newTime; } }
+        function revealAnswer() { const focusedElement = document.activeElement; let gapToRevealData = null; if (focusedElement && focusedElement.classList.contains('lyric-gap') && !focusedElement.disabled) { gapToRevealData = gapsData.find(g => g.element === focusedElement); } if (!gapToRevealData) { gapToRevealData = gapsData.find(g => !g.element.disabled && !g.element.classList.contains('correct')); } if (gapToRevealData) { const { element, answer, lineEl } = gapToRevealData; element.value = answer; element.classList.remove('incorrect'); element.classList.add('correct'); element.disabled = true; updateScore(); if (lineEl) checkLineCompletion(lineEl); focusNextGap(); } }
+        function populatePlaybackRates() { const rates = [0.5, 0.75, 1, 1.25, 1.5, 2.0]; playbackRateSelect.innerHTML = ''; rates.forEach(rate => { const option = document.createElement('option'); option.value = rate; option.textContent = (rate === 1) ? 'Normale' : `${rate}x`; playbackRateSelect.appendChild(option); }); }
         
-        // MODIFICATION: Logique du bouton "Révéler" améliorée
-        function revealAnswer() {
-            const focusedElement = document.activeElement;
-            let gapToRevealData = null;
-
-            // Priorité 1: Révéler le champ actuellement focus, s'il est un "trou" non résolu.
-            if (focusedElement && focusedElement.classList.contains('lyric-gap') && !focusedElement.disabled) {
-                gapToRevealData = gapsData.find(g => g.element === focusedElement);
-            }
-
-            // Priorité 2: Sinon, trouver le premier "trou" disponible dans la chanson.
-            if (!gapToRevealData) {
-                gapToRevealData = gapsData.find(g => !g.element.disabled && !g.element.classList.contains('correct'));
-            }
-            
-            if (gapToRevealData) {
-                const { element, answer, lineEl } = gapToRevealData;
-                element.value = answer;
-                element.classList.remove('incorrect');
-                element.classList.add('correct');
-                element.disabled = true;
-                updateScore();
-                if (lineEl) checkLineCompletion(lineEl);
-                focusNextGap();
-            }
-        }
+        function syncPlayerState() { if (!localAudioPlayer || !currentSongData) return; const currentTime = localAudioPlayer.currentTime; if (currentSongData.endTime && currentTime >= currentSongData.endTime) { if (!localAudioPlayer.paused) { localAudioPlayer.pause(); localAudioPlayer.currentTime = currentSongData.endTime; } } /* Synchronisation désactivée */ }
         
-        function populatePlaybackRates() { /* ... pas de changement ... */ }
-        function handlePlaybackRateChange(event) { /* ... pas de changement ... */ }
-        
-        // NOUVELLE FONCTION POUR LA SYNCHRONISATION DES PAROLES
-        function syncPlayerState() {
-            if (!localAudioPlayer || !currentSongData || localAudioPlayer.paused) return;
-
-            const currentTime = localAudioPlayer.currentTime;
-            const songStartTime = currentSongData.startTime || 0;
-
-            // Logique de fin de section
-            if (currentSongData.endTime && currentTime >= currentSongData.endTime) {
-                if (!localAudioPlayer.paused) { 
-                    localAudioPlayer.pause(); 
-                    localAudioPlayer.currentTime = currentSongData.endTime; 
-                }
-                return; 
-            }
-
-            // Logique de surbrillance des paroles
-            let activeLineIndex = -1;
-            // Trouve la dernière ligne dont le temps est passé
-            for (let i = currentSongData.lyrics.length - 1; i >= 0; i--) {
-                const lineTime = songStartTime + currentSongData.lyrics[i].time;
-                if (lineTime <= currentTime) {
-                    activeLineIndex = i;
-                    break;
-                }
-            }
-            
-            // Applique la classe 'active-line' à la bonne ligne
-            document.querySelectorAll('#lyrics-container .lyric-line').forEach((lineEl, index) => {
-                lineEl.classList.toggle('active-line', index === activeLineIndex);
-            });
-        }
-        
-        function handleInputChange(event) { /* ... pas de changement ... */ }
-        function checkLineCompletion(lineEl) { /* ... pas de changement ... */ }
-        function handleInputKeyPress(event) { /* ... pas de changement ... */ }
-        function focusNextGap() { /* ... pas de changement ... */ }
-        function updateScore() { /* ... pas de changement ... */ }
-        function resetScore() { /* ... pas de changement ... */ }
-        function updateScoreDisplay() { /* ... pas de changement ... */ }
-        function handleSpacebar(event) { /* ... pas de changement ... */ }
+        function handleInputChange(event) { const input = event.target; const userAnswer = input.value.trim().toLowerCase(); const correctAnswer = input.dataset.answer.toLowerCase(); const lineEl = input.closest('.lyric-line'); if (userAnswer === correctAnswer) { if (!input.classList.contains('correct')) { input.classList.remove('incorrect'); input.classList.add('correct'); input.disabled = true; input.value = input.dataset.answer; updateScore(); if (lineEl) checkLineCompletion(lineEl); focusNextGap(); } } else { if (input.classList.contains('correct')) { input.classList.remove('correct'); input.disabled = false; updateScore(); } if (userAnswer !== '') { input.classList.add('incorrect'); } else { input.classList.remove('incorrect'); } if (lineEl) { const transDiv = lineEl.querySelector('.line-translation'); if (transDiv) transDiv.classList.remove('visible'); } } }
+        function checkLineCompletion(lineEl) { if (!lineEl) return; const gaps = lineEl.querySelectorAll('.lyric-gap'); let allCorrect = gaps.length > 0 ? Array.from(gaps).every(g => g.classList.contains('correct')) : true; const transDiv = lineEl.querySelector('.line-translation'); if (transDiv) { transDiv.classList.toggle('visible', allCorrect); } }
+        function handleInputKeyPress(event) { if (event.key === 'Enter') { event.preventDefault(); focusNextGap(); } }
+        function focusNextGap() { const gaps = Array.from(lyricsContainer.querySelectorAll('.lyric-gap:not(:disabled):not(.correct)')); const currentFocus = document.activeElement; let currentIndex = -1; if (currentFocus && currentFocus.classList.contains('lyric-gap')) { currentIndex = gaps.indexOf(currentFocus); } let nextIndex = (currentIndex !== -1 && currentIndex + 1 < gaps.length) ? currentIndex + 1 : 0; if (gaps.length > 0) { if (gaps[nextIndex] && gaps[nextIndex] !== currentFocus) { gaps[nextIndex].focus(); } else if (gaps[0] && gaps[0] !== currentFocus) { gaps[0].focus(); } } else { playButton.focus(); } }
+        function updateScore() { correctGaps = gapsData.filter(g => g.element.classList.contains('correct')).length; updateScoreDisplay(); }
+        function resetScore() { correctGaps = 0; updateScoreDisplay(); }
+        function updateScoreDisplay() { scoreArea.textContent = `Score: ${correctGaps} / ${totalGaps}`; }
+        function handleSpacebar(event) { if (event.code !== 'Space' && event.key !== ' ' && event.keyCode !== 32) { return; } if (!playerScreen.classList.contains('active-screen')) { return; } const focused = document.activeElement; if (focused && (focused.tagName === 'INPUT' || focused.tagName === 'SELECT' || focused.tagName === 'TEXTAREA')) { return; } event.preventDefault(); togglePlayPause(); }
 
         document.addEventListener('DOMContentLoaded', () => {
             localAudioPlayer = document.getElementById('local-audio-player');
             showScreen('home-screen');
             populateSongList();
-
             startLearningButton.addEventListener('click', () => showScreen('song-selection-screen'));
             backToHomeButton.addEventListener('click', () => showScreen('home-screen'));
-            backToSelectionButton.addEventListener('click', () => {
-                showScreen('song-selection-screen');
-                // Nettoyer les paroles actives quand on quitte le lecteur
-                document.querySelectorAll('#lyrics-container .lyric-line').forEach(lineEl => {
-                    lineEl.classList.remove('active-line');
-                });
-            });
-            
+            backToSelectionButton.addEventListener('click', () => showScreen('song-selection-screen'));
             difficultySlider.addEventListener('input', updateDifficultyValue);
             playButton.addEventListener('click', togglePlayPause);
             rewind10Button.addEventListener('click', () => rewindVideo(REWIND_SECONDS_10));
@@ -470,22 +296,13 @@
             
             if (localAudioPlayer) {
                 populatePlaybackRates();
-                localAudioPlayer.addEventListener('loadedmetadata', () => {
-                    if (currentSongData) localAudioPlayer.currentTime = currentSongData.startTime || 0;
-                });
-                localAudioPlayer.addEventListener('canplay', () => {
-                    playButton.textContent = "Play";
-                    playButton.disabled = false;
-                    [rewind10Button, rewind5Button, rewind3Button, forward3Button, forward5Button, forward10Button, revealButton, playbackRateSelect].forEach(btn => btn.disabled = false);
-                    localAudioPlayer.playbackRate = 1; 
-                    playbackRateSelect.value = "1";
-                    prepareUiForSong();
-                });
+                localAudioPlayer.addEventListener('loadedmetadata', () => { if (currentSongData) localAudioPlayer.currentTime = currentSongData.startTime || 0; });
+                localAudioPlayer.addEventListener('canplay', () => { playButton.textContent = "Play"; playButton.disabled = false; [rewind10Button, rewind5Button, rewind3Button, forward3Button, forward5Button, forward10Button, revealButton, playbackRateSelect].forEach(btn => btn.disabled = false); localAudioPlayer.playbackRate = 1; playbackRateSelect.value = "1"; prepareUiForSong(); });
                 localAudioPlayer.addEventListener('play', () => { playButton.textContent = "Pause"; });
                 localAudioPlayer.addEventListener('pause', () => { playButton.textContent = "Play"; });
                 localAudioPlayer.addEventListener('ended', () => { playButton.textContent = "Rejouer"; });
                 localAudioPlayer.addEventListener('error', () => { /* ... gestion erreur ... */ });
-                // Note : L'écouteur pour 'timeupdate' est maintenant géré dans loadAndShowPlayer
+                localAudioPlayer.addEventListener('timeupdate', syncPlayerState); // Gardé pour la logique de fin de morceau
             }
             window.addEventListener('keydown', handleSpacebar);
         });
