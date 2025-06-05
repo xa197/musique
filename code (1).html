@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paroles Futuristes - Apprentissage Musical</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+             --bg-color: #0f0f1a; --primary-color: #00ffff; --secondary-color: #9c27b0;
+             --text-color: #e0e0e0; --text-darker: #a0a0a0; --input-bg: #1a1a2e;
+             --input-border: #4a4a6a; --input-focus-glow: rgba(0, 255, 255, 0.7);
+             --correct-color: #00ff7f; --incorrect-color: #ff4d4d;
+             --button-bg: linear-gradient(45deg, var(--secondary-color), #4a00e0);
+             --button-hover-bg: linear-gradient(45deg, #4a00e0, var(--secondary-color));
+             --container-bg: rgba(26, 26, 46, 0.85);
+             --border-glow: rgba(0, 255, 255, 0.3);
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Poppins', sans-serif; line-height: 1.6; margin: 0; padding: 0;
+            background-color: var(--bg-color); color: var(--text-color);
+            background-image: radial-gradient(circle at top left, rgba(0, 255, 255, 0.05), transparent 40%),
+                              radial-gradient(circle at bottom right, rgba(156, 39, 176, 0.05), transparent 40%);
+            background-attachment: fixed;
+            display: flex; justify-content: center; align-items: flex-start;
+            min-height: 100vh; padding-top: 20px; padding-bottom: 120px;
+        }
+        #main-app-area { width: 100%; max-width: 800px; margin: 0 auto; }
+        .screen {
+            display: none; background: var(--container-bg); padding: 30px 40px; border-radius: 15px;
+            box-shadow: 0 0 15px var(--border-glow), 0 0 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0, 255, 255, 0.2); backdrop-filter: blur(5px);
+            animation: fadeIn 0.5s ease-in-out; margin-bottom: 20px;
+        }
+        .screen.active-screen { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        h1, h2 { text-align: center; color: var(--primary-color); font-weight: 600; letter-spacing: 2px; text-shadow: 0 0 5px var(--primary-color); margin-bottom: 30px; }
+        h2 { color: var(--secondary-color); text-shadow: 0 0 5px var(--secondary-color); font-size: 1.8em;}
+        .control-button, .nav-button, .song-button { padding: 12px 20px; font-size: 1em; cursor: pointer; font-weight: 400; color: white; border: none; border-radius: 8px; background: var(--button-bg); box-shadow: 0 2px 5px rgba(0,0,0,0.4); transition: all 0.3s ease; white-space: nowrap; display: block; text-align: center; text-decoration: none; }
+        .control-button:hover:not(:disabled), .nav-button:hover, .song-button:hover { background: var(--button-hover-bg); box-shadow: 0 0 8px var(--secondary-color), 0 4px 8px rgba(0,0,0,0.5); transform: translateY(-2px); }
+        .control-button:disabled { background: #555; cursor: not-allowed; opacity: 0.6; box-shadow: none; transform: none; }
+        .nav-button { width: 60%; margin: 25px auto; }
+        #home-screen p { text-align: center; font-size: 1.1em; margin-bottom: 40px; }
+        #song-list { list-style: none; padding: 0; margin: 0; } #song-list li { margin-bottom: 15px; }
+        .song-button { font-size: 1em; padding: 10px 15px; width: 100%; box-sizing: border-box; }
+        .song-artist { font-size: 0.85em; color: var(--text-darker); display: block; margin-top: 3px;}
+        #back-to-home { margin-top: 30px; width: auto; display: inline-block; font-size: 0.9em; padding: 8px 15px;}
+        #player-screen h2 { margin-bottom: 15px; font-size: 1.6em; }
+        #media-player-container {
+            margin-bottom: 25px; background: #000; border-radius: 10px;
+            box-shadow: 0 0 10px var(--border-glow); padding: 10px;
+        }
+        #media-player-container audio { width: 100%; display: block; }
+        #player-controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; padding: 15px 20px; margin-top: 25px; background: var(--container-bg); border-radius: 10px; box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.3); position: sticky; bottom: 0; z-index: 100; border-top: 1px solid rgba(0, 255, 255, 0.2); }
+        .control-group { display: flex; align-items: center; gap: 8px; }
+        #player-controls label { color: var(--text-darker); font-size: 0.9em; white-space: nowrap; }
+        #difficulty-slider { flex-grow: 0; width: 110px; margin: 0 5px; cursor: pointer; accent-color: var(--primary-color); }
+        #difficulty-value { font-weight: bold; min-width: 15px; text-align: right; color: var(--primary-color); }
+        #playback-rate-select { background-color: var(--input-bg); color: var(--text-color); border: 1px solid var(--input-border); border-radius: 5px; padding: 5px 8px; font-family: inherit; font-size: 0.9em; cursor: pointer; outline: none; }
+        #playback-rate-select:focus { border-color: var(--primary-color); box-shadow: 0 0 8px var(--input-focus-glow); }
+        #player-controls .control-button { padding: 8px 10px; font-size: 0.8em; flex-shrink: 0; min-width: 45px; text-align: center; }
+        #reveal-button { background: linear-gradient(45deg, var(--primary-color), #00b8d4); }
+        #reveal-button:hover:not(:disabled) { background: linear-gradient(45deg, #00b8d4, var(--primary-color)); box-shadow: 0 0 8px var(--primary-color), 0 4px 8px rgba(0,0,0,0.5); }
+        #lyrics-container { margin-top: 25px; padding: 20px; background-color: rgba(0,0,0,0.15); border-radius: 10px; min-height: 120px; font-size: 1.15em; border: 1px solid var(--input-border); box-shadow: inset 0 0 10px rgba(0,0,0,0.3); margin-bottom: 20px; }
+        .lyric-line { margin-bottom: 15px; line-height: 1.8; }
+        .lyric-word { display: inline-block; margin-right: 6px; vertical-align: baseline; }
+        .lyric-gap { display: inline-block; margin-right: 6px; padding: 4px 6px; vertical-align: baseline; border: 1px solid var(--input-border); border-radius: 5px; font-size: 1em; min-width: 60px; background-color: var(--input-bg); color: var(--text-color); transition: all 0.3s ease; }
+        .lyric-gap:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 8px var(--input-focus-glow); background-color: #2a2a4e; }
+        .lyric-gap.correct { background-color: rgba(0, 255, 127, 0.1); border-color: var(--correct-color); color: var(--correct-color); font-weight: bold; box-shadow: 0 0 5px rgba(0, 255, 127, 0.5); }
+        .lyric-gap.incorrect { background-color: rgba(255, 77, 77, 0.1); border-color: var(--incorrect-color); box-shadow: 0 0 5px rgba(255, 77, 77, 0.5); }
+        .line-translation { display: none; font-size: 0.9em; font-style: italic; color: var(--secondary-color); padding-left: 15px; margin-top: 5px; border-left: 2px solid var(--secondary-color); opacity: 0; transition: opacity 0.5s ease-in-out; }
+        .line-translation.visible { display: block; opacity: 1; }
+        #score-area { margin-top: 25px; font-weight: 600; text-align: center; font-size: 1.1em; color: var(--primary-color); margin-bottom: 20px; }
+        .info-text { font-size: 0.85em; color: var(--text-darker); text-align: center; margin-top: 15px;}
+        .warning-text { color: #ffcc00; }
+        .error-text { color: var(--incorrect-color); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="main-app-area">
+
+        <div id="home-screen" class="screen active-screen">
+            <h1>Paroles Futuristes</h1>
+            <p>Apprenez une langue en musique !</p>
+            <button id="start-learning-button" class="nav-button">Commencer l'Apprentissage</button>
+        </div>
+
+        <div id="song-selection-screen" class="screen">
+            <h2>Choisissez une Chanson</h2>
+            <ul id="song-list"><li>Chargement des chansons...</li></ul>
+            <button id="back-to-home" class="nav-button" style="width: auto; display: inline-block; font-size: 0.9em; padding: 8px 15px; margin-top: 20px;">Retour Accueil</button>
+        </div>
+
+        <div id="player-screen" class="screen">
+            <h2 id="player-song-title">Titre de la Chanson</h2>
+            <button id="back-to-selection" class="nav-button" style="width: auto; display: inline-block; font-size: 0.9em; padding: 8px 15px; margin-bottom: 20px;">Changer Chanson</button>
+
+            <div id="media-player-container">
+                 <audio id="local-audio-player" controls></audio>
+            </div>
+
+            <div id="lyrics-container">
+                 <p class="info-text">Chargez une chanson et cliquez sur Play.</p>
+            </div>
+
+            <div id="score-area">Score: 0 / 0</div>
+
+            <div id="player-controls">
+                <div class="control-group">
+                     <label for="difficulty-slider">Niv:</label>
+                     <input type="range" id="difficulty-slider" min="1" max="10" value="5">
+                     <span id="difficulty-value">5</span>
+                     <label for="playback-rate-select" style="margin-left: 15px;">Vit:</label>
+                     <select id="playback-rate-select" title="Vitesse de lecture" disabled></select>
+                 </div>
+                 <div class="control-group">
+                    <button id="rewind10-button" class="control-button" disabled title="Reculer de 10s">-10s</button>
+                    <button id="rewind5-button" class="control-button" disabled title="Reculer de 5s">-5s</button>
+                    <button id="rewind3-button" class="control-button" disabled title="Reculer de 3s">-3s</button>
+                    <button id="play-button" class="control-button" disabled style="min-width: 60px;">Chargement...</button>
+                    <button id="forward3-button" class="control-button" disabled title="Avancer de 3s">+3s</button>
+                    <button id="forward5-button" class="control-button" disabled title="Avancer de 5s">+5s</button>
+                    <button id="forward10-button" class="control-button" disabled title="Avancer de 10s">+10s</button>
+                 </div>
+                 <div class="control-group">
+                    <button id="reveal-button" class="control-button" disabled title="Révéler mot">Révéler</button>
+                 </div>
+            </div>
+             <p class="info-text warning-text" style="margin-top: 15px;">Utilisez des fichiers audio dont vous avez les droits.</p>
+        </div>
+    </div>
+
+    <script>
+        const songsData = [
+          { 
+            id: "shapeofyou-refrain", title: "Shape of You (Refrain)", artist: "Ed Sheeran",
+            // IMPORTANT: Assurez-vous que ce nom de fichier correspond EXACTEMENT au fichier sur GitHub
+            filePath: "Ed Sheeran - Shape of You (Official Music Video).mp3", 
+            startTime: 48, 
+            endTime: 75,   
+            lyrics: [ 
+              { time: 0.5,  words: ["I'm", "in", "love", "with", "the", "shape", "of", "you"], translation: "Je suis amoureux de ta silhouette" },
+              { time: 3.5,  words: ["We", "push", "and", "pull", "like", "a", "magnet", "do"], translation: "On s'attire et se repousse comme des aimants" },
+              { time: 6.5,  words: ["Although", "my", "heart", "is", "falling", "too"], translation: "Même si mon cœur est en train de tomber aussi" },
+              { time: 9.0,  words: ["I'm", "in", "love", "with", "your", "body"], translation: "Je suis amoureux de ton corps" },
+              { time: 12.5, words: ["And", "last", "night", "you", "were", "in", "my", "room"], translation: "Et la nuit dernière tu étais dans ma chambre" },
+              { time: 15.5, words: ["And", "now", "my", "bedsheets", "smell", "like", "you"], translation: "Et maintenant mes draps sentent comme toi" },
+              { time: 18.5, words: ["Every", "day", "discovering", "something", "brand", "new"], translation: "Chaque jour je découvre quelque chose de tout nouveau" },
+              { time: 21.0, words: ["I'm", "in", "love", "with", "your", "body"], translation: "Je suis amoureux de ton corps" }
+            ]
+          },
+          /* D'autres chansons peuvent être ajoutées ici plus tard
+           {
+             id: "perfect-edsheeran", title: "Perfect (Couplet 1 & Refrain 1)", artist: "Ed Sheeran",
+             filePath: "perfect.mp3", // Exemple de chemin si le fichier est à la racine
+             startTime: 0, endTime: 76, 
+             lyrics: [ // ... ]
+           },
+          */
+        ];
+
+        let currentSongId = null;
+        let currentSongData = null;
+        let localAudioPlayer = null; 
+        let totalGaps = 0;
+        let correctGaps = 0;
+        let gapsData = [];
+        let syncInterval = null; 
+        const REWIND_SECONDS_10 = 10; const REWIND_SECONDS_5 = 5; const REWIND_SECONDS_3 = 3;
+        const FORWARD_SECONDS_3 = 3; const FORWARD_SECONDS_5 = 5; const FORWARD_SECONDS_10 = 10;
+        const MIN_WORD_LENGTH_FOR_GAP = 2;
+
+        const homeScreen = document.getElementById('home-screen');
+        const songSelectionScreen = document.getElementById('song-selection-screen');
+        const playerScreen = document.getElementById('player-screen');
+        const startLearningButton = document.getElementById('start-learning-button');
+        const backToHomeButton = document.getElementById('back-to-home');
+        const backToSelectionButton = document.getElementById('back-to-selection');
+        const playerSongTitle = document.getElementById('player-song-title');
+        const difficultySlider = document.getElementById('difficulty-slider');
+        const difficultyValueSpan = document.getElementById('difficulty-value');
+        const playButton = document.getElementById('play-button');
+        const rewind10Button = document.getElementById('rewind10-button');
+        const rewind5Button = document.getElementById('rewind5-button');
+        const rewind3Button = document.getElementById('rewind3-button');
+        const forward3Button = document.getElementById('forward3-button');
+        const forward5Button = document.getElementById('forward5-button');
+        const forward10Button = document.getElementById('forward10-button');
+        const revealButton = document.getElementById('reveal-button');
+        const playbackRateSelect = document.getElementById('playback-rate-select');
+        const lyricsContainer = document.getElementById('lyrics-container');
+        const scoreArea = document.getElementById('score-area');
+        const songListUl = document.getElementById('song-list');
+        
+        function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
+        
+        function showScreen(screenId) {
+            [homeScreen, songSelectionScreen, playerScreen].forEach(screen => {
+                screen.classList.toggle('active-screen', screen.id === screenId);
+            });
+            if (screenId !== 'player-screen' && localAudioPlayer && !localAudioPlayer.paused) {
+                localAudioPlayer.pause();
+            }
+             if (screenId !== 'player-screen') { stopSyncTimer(); }
+        }
+
+        function populateSongList() {
+            songListUl.innerHTML = '';
+            if (songsData.length === 0) { songListUl.innerHTML = '<li>Aucune chanson disponible.</li>'; return; }
+            songsData.forEach(song => {
+                const li = document.createElement('li');
+                const button = document.createElement('button');
+                button.classList.add('song-button');
+                button.dataset.songId = song.id;
+                button.innerHTML = `${song.title} <span class="song-artist">par ${song.artist}</span>`;
+                button.addEventListener('click', () => loadAndShowPlayer(song.id));
+                li.appendChild(button);
+                songListUl.appendChild(li);
+            });
+        }
+
+        function loadAndShowPlayer(songId) {
+            currentSongId = songId;
+            currentSongData = songsData.find(song => song.id === songId);
+
+            if (!currentSongData || !currentSongData.filePath) {
+                console.error("Song data error for ID:", songId);
+                lyricsContainer.innerHTML = '<p class="info-text error-text">Erreur: Données de chanson manquantes.</p>';
+                return;
+            }
+
+            playerSongTitle.textContent = `${currentSongData.title} - ${currentSongData.artist}`;
+            showScreen('player-screen');
+
+            if (!localAudioPlayer) {
+                console.error("Lecteur audio non initialisé.");
+                lyricsContainer.innerHTML = '<p class="info-text error-text">Erreur: Lecteur audio non trouvé.</p>';
+                return;
+            }
+            
+            localAudioPlayer.src = currentSongData.filePath;
+            localAudioPlayer.load(); 
+
+            playButton.textContent = "Chargement...";
+            playButton.disabled = true;
+            [rewind10Button, rewind5Button, rewind3Button, forward3Button, forward5Button, forward10Button, revealButton, playbackRateSelect].forEach(btn => btn.disabled = true);
+            
+            difficultySlider.value = 5; 
+            updateDifficultyValue();
+        }
+
+        function prepareUiForSong() {
+            if (!currentSongData) { console.error("prepareUiForSong: Pas de données de chanson!"); return; }
+            playerSongTitle.textContent = `${currentSongData.title} - ${currentSongData.artist}`;
+            difficultySlider.value = 5;
+            updateDifficultyValue(); 
+            resetScore();
+        }
+
+        function updateDifficultyValue() { 
+            difficultyValueSpan.textContent = difficultySlider.value; 
+            if (currentSongData && localAudioPlayer) { renderLyrics(); resetScore(); } 
+        }
+
+        function renderLyrics() { 
+            if (!currentSongData) { lyricsContainer.innerHTML = "<p class='info-text'>Chargez une chanson.</p>"; return; }; 
+            lyricsContainer.innerHTML = ''; gapsData = []; totalGaps = 0; 
+            const difficulty = parseInt(difficultySlider.value, 10); 
+            const potentialGaps = []; 
+            currentSongData.lyrics.forEach((line, lineIdx) => { 
+                line.words.forEach((word, wordIdx) => { 
+                    const cleanWord = word.replace(/[.,!?;:]/g, ''); 
+                    if (cleanWord.length >= MIN_WORD_LENGTH_FOR_GAP) { 
+                        potentialGaps.push({ lineIdx, wordIdx, word, answer: cleanWord }); 
+                    } 
+                }); 
+            }); 
+            if (potentialGaps.length === 0) { 
+                lyricsContainer.innerHTML = "<p class='info-text'>Pas de mots pour les trous.</p>"; 
+                updateScoreDisplay(); return; 
+            } 
+            const gapPercentage = 0.1 + (difficulty - 1) * (0.8 / 9); 
+            let targetNumberOfGaps = Math.round(potentialGaps.length * gapPercentage); 
+            targetNumberOfGaps = Math.max(1, Math.min(potentialGaps.length, targetNumberOfGaps)); 
+            const shuffledPotentialGaps = shuffleArray([...potentialGaps]); 
+            const selectedGapsInfo = shuffledPotentialGaps.slice(0, targetNumberOfGaps); 
+            const gapIndices = new Set(selectedGapsInfo.map(g => `${g.lineIdx}-${g.wordIdx}`)); 
+            totalGaps = gapIndices.size; 
+            currentSongData.lyrics.forEach((line, lineIdx) => { 
+                const lineDiv = document.createElement('div'); 
+                lineDiv.classList.add('lyric-line'); 
+                lineDiv.dataset.lineIndex = lineIdx; 
+                line.words.forEach((word, wordIdx) => { 
+                    const cleanWord = word.replace(/[.,!?;:]/g, ''); 
+                    const isGap = gapIndices.has(`${lineIdx}-${wordIdx}`); 
+                    if (isGap) { 
+                        const input = document.createElement('input'); 
+                        input.type = 'text'; input.classList.add('lyric-gap'); 
+                        input.dataset.answer = cleanWord; 
+                        input.style.width = `${Math.max(60, cleanWord.length * 10)}px`; 
+                        input.setAttribute('autocomplete', 'off'); input.setAttribute('autocorrect', 'off');
+                        input.setAttribute('autocapitalize', 'off'); input.setAttribute('spellcheck', 'false'); 
+                        lineDiv.appendChild(input); 
+                        gapsData.push({ element: input, answer: cleanWord, lineEl: lineDiv }); 
+                        input.addEventListener('input', handleInputChange); 
+                        input.addEventListener('keypress', handleInputKeyPress); 
+                    } else { 
+                        const wordSpan = document.createElement('span'); 
+                        wordSpan.classList.add('lyric-word'); wordSpan.textContent = word; 
+                        lineDiv.appendChild(wordSpan); 
+                    } 
+                    lineDiv.appendChild(document.createTextNode(' ')); 
+                }); 
+                const translationDiv = document.createElement('div'); 
+                translationDiv.classList.add('line-translation'); 
+                translationDiv.textContent = line.translation || ''; 
+                lineDiv.appendChild(translationDiv); 
+                lyricsContainer.appendChild(lineDiv); 
+            }); 
+            updateScoreDisplay(); 
+        }
+        
+        function togglePlayPause() {
+            if (!localAudioPlayer || !currentSongData) { return; }
+            try {
+                if (localAudioPlayer.paused || localAudioPlayer.ended) {
+                    if (localAudioPlayer.ended || (currentSongData.endTime && localAudioPlayer.currentTime >= currentSongData.endTime - 0.1)) {
+                        localAudioPlayer.currentTime = currentSongData.startTime || 0;
+                    }
+                    localAudioPlayer.play();
+                } else { localAudioPlayer.pause(); }
+            } catch (e) { console.error("Erreur Play/Pause:", e); playButton.textContent = "Erreur"; playButton.disabled = true; }
+        }
+
+        function rewindVideo(seconds) {
+            if (localAudioPlayer && currentSongData) {
+                try {
+                    const newTime = localAudioPlayer.currentTime - seconds;
+                    localAudioPlayer.currentTime = Math.max(currentSongData.startTime || 0, newTime);
+                } catch(e){ console.error("Erreur Rewind:", e); }
+            }
+        }
+
+        function fastForwardVideo(seconds) {
+            if (localAudioPlayer && currentSongData) {
+                try {
+                    let newTime = localAudioPlayer.currentTime + seconds;
+                    if (currentSongData.endTime) { newTime = Math.min(newTime, currentSongData.endTime); } 
+                    else if (localAudioPlayer.duration && !isNaN(localAudioPlayer.duration)) { newTime = Math.min(newTime, localAudioPlayer.duration); }
+                    localAudioPlayer.currentTime = newTime;
+                } catch (e) { console.error("Erreur FastForward:", e); }
+            }
+        }
+        
+        function revealAnswer() { const nextGap = gapsData.find(g => !g.element.disabled && !g.element.classList.contains('correct')); if (nextGap) { nextGap.element.value = nextGap.answer; nextGap.element.classList.remove('incorrect'); nextGap.element.classList.add('correct'); nextGap.element.disabled = true; updateScore(); if (nextGap.lineEl) checkLineCompletion(nextGap.lineEl); focusNextGap(); } }
+        
+        function populatePlaybackRates() {
+            const rates = [0.5, 0.75, 1, 1.25, 1.5, 2.0];
+            playbackRateSelect.innerHTML = '';
+            rates.forEach(rate => {
+                const option = document.createElement('option');
+                option.value = rate; option.textContent = (rate === 1) ? 'Normale' : `${rate}x`;
+                playbackRateSelect.appendChild(option);
+            });
+        }
+
+        function handlePlaybackRateChange(event) { setPlaybackRate(parseFloat(event.target.value)); }
+        function setPlaybackRate(rate) { if (localAudioPlayer) { try { localAudioPlayer.playbackRate = rate; } catch(e) { console.error("Erreur vitesse:", e); } } }
+        
+        function startSyncTimer() { /* Géré par timeupdate */ }
+        function stopSyncTimer() { if (syncInterval) { clearInterval(syncInterval); syncInterval = null; } }
+
+        function checkEndTimeAndSyncLyrics() {
+            if (!localAudioPlayer || !currentSongData || localAudioPlayer.paused) { return; }
+            try {
+                const currentTime = localAudioPlayer.currentTime;
+                if (currentSongData.endTime && currentTime >= currentSongData.endTime) {
+                    if (!localAudioPlayer.paused) { localAudioPlayer.pause(); localAudioPlayer.currentTime = currentSongData.endTime; }
+                    return; 
+                }
+                // Future synchro paroles ici
+            } catch(e) { console.error("Erreur checkEndTimeAndSyncLyrics:", e); }
+        }
+        
+        function handleInputChange(event) { const input = event.target; const userAnswer = input.value.trim(); const correctAnswer = input.dataset.answer; const lineEl = input.closest('.lyric-line'); if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) { if (!input.classList.contains('correct')) { input.classList.remove('incorrect'); input.classList.add('correct'); input.disabled = true; input.value = input.dataset.answer; updateScore(); if (lineEl) checkLineCompletion(lineEl); focusNextGap(); } } else { if (input.classList.contains('correct')) { input.classList.remove('correct'); input.disabled = false; updateScore(); if (lineEl) checkLineCompletion(lineEl); } if (userAnswer !== '') { input.classList.add('incorrect'); } else { input.classList.remove('incorrect'); } if (lineEl) { const transDiv = lineEl.querySelector('.line-translation'); if (transDiv) transDiv.classList.remove('visible'); } } }
+        function checkLineCompletion(lineEl) { if (!lineEl) return; const gaps = lineEl.querySelectorAll('.lyric-gap'); let allCorrect = gaps.length > 0 ? Array.from(gaps).every(g => g.classList.contains('correct')) : true; const transDiv = lineEl.querySelector('.line-translation'); if (transDiv) { transDiv.classList.toggle('visible', allCorrect); } }
+        function handleInputKeyPress(event) { if (event.key === 'Enter') { event.preventDefault(); focusNextGap(); } }
+        function focusNextGap() { const gaps = Array.from(lyricsContainer.querySelectorAll('.lyric-gap:not(:disabled):not(.correct)')); const currentFocus = document.activeElement; let currentIndex = -1; if (currentFocus && currentFocus.classList.contains('lyric-gap')) { currentIndex = gaps.indexOf(currentFocus); } let nextIndex = (currentIndex !== -1 && currentIndex + 1 < gaps.length) ? currentIndex + 1 : 0; if (gaps.length > 0) { if(gaps[nextIndex] && gaps[nextIndex] !== currentFocus) { gaps[nextIndex].focus(); } else if (gaps[0] && gaps[0] !== currentFocus) { gaps[0].focus(); } } else { playButton.focus(); } }
+        function updateScore() { correctGaps = gapsData.filter(g => g.element.classList.contains('correct')).length; updateScoreDisplay(); }
+        function resetScore() { correctGaps = 0; updateScoreDisplay(); }
+        function updateScoreDisplay() { scoreArea.textContent = `Score: ${correctGaps} / ${totalGaps}`; }
+        function handleSpacebar(event) { if (event.code !== 'Space' && event.key !== ' ' && event.keyCode !== 32) { return; } if (!playerScreen.classList.contains('active-screen')) { return; } const focused = document.activeElement; if (focused && (focused.tagName === 'INPUT' || focused.tagName === 'SELECT' || focused.tagName === 'TEXTAREA')) { return; } event.preventDefault(); togglePlayPause(); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showScreen('home-screen');
+            populateSongList();
+
+            startLearningButton.addEventListener('click', () => showScreen('song-selection-screen'));
+            backToHomeButton.addEventListener('click', () => showScreen('home-screen'));
+            backToSelectionButton.addEventListener('click', () => showScreen('song-selection-screen'));
+
+            difficultySlider.addEventListener('input', updateDifficultyValue);
+            playButton.addEventListener('click', togglePlayPause);
+            rewind10Button.addEventListener('click', () => rewindVideo(REWIND_SECONDS_10));
+            rewind5Button.addEventListener('click', () => rewindVideo(REWIND_SECONDS_5));
+            rewind3Button.addEventListener('click', () => rewindVideo(REWIND_SECONDS_3));
+            forward3Button.addEventListener('click', () => fastForwardVideo(FORWARD_SECONDS_3));
+            forward5Button.addEventListener('click', () => fastForwardVideo(FORWARD_SECONDS_5));
+            forward10Button.addEventListener('click', () => fastForwardVideo(FORWARD_SECONDS_10));
+            revealButton.addEventListener('click', revealAnswer);
+            playbackRateSelect.addEventListener('change', handlePlaybackRateChange);
+            
+            localAudioPlayer = document.getElementById('local-audio-player');
+
+            if (localAudioPlayer) {
+                populatePlaybackRates();
+
+                localAudioPlayer.addEventListener('loadedmetadata', () => {
+                    if (currentSongData && typeof currentSongData.startTime === 'number') {
+                        localAudioPlayer.currentTime = currentSongData.startTime;
+                    }
+                });
+
+                localAudioPlayer.addEventListener('canplay', () => {
+                    playButton.textContent = "Play";
+                    playButton.disabled = false;
+                    [rewind10Button, rewind5Button, rewind3Button, forward3Button, forward5Button, forward10Button, revealButton, playbackRateSelect].forEach(btn => btn.disabled = false);
+                    localAudioPlayer.playbackRate = 1; 
+                    playbackRateSelect.value = "1";
+                    prepareUiForSong();
+                });
+
+                localAudioPlayer.addEventListener('play', () => { playButton.textContent = "Pause"; startSyncTimer(); });
+                localAudioPlayer.addEventListener('pause', () => {
+                    if (currentSongData && currentSongData.endTime && localAudioPlayer.currentTime >= currentSongData.endTime - 0.05) {
+                         playButton.textContent = "Rejouer";
+                    } else { playButton.textContent = "Play"; }
+                    stopSyncTimer(); 
+                });
+                localAudioPlayer.addEventListener('ended', () => {
+                    playButton.textContent = "Rejouer"; stopSyncTimer();
+                    if (currentSongData && typeof currentSongData.startTime === 'number') {
+                        localAudioPlayer.currentTime = currentSongData.startTime;
+                    }
+                });
+                localAudioPlayer.addEventListener('error', () => {
+                    console.error('Erreur lecteur audio:', localAudioPlayer.error);
+                    let msg = "Erreur Lecteur Audio: ";
+                    if (localAudioPlayer.error) {
+                        switch (localAudioPlayer.error.code) {
+                            case 1: msg += "Chargement annulé."; break;
+                            case 2: msg += "Erreur réseau."; break;
+                            case 3: msg += "Erreur de décodage."; break;
+                            case 4: msg += "Format non supporté ou source inaccessible."; break;
+                            default: msg += `Code ${localAudioPlayer.error.code}.`;
+                        }
+                    } else { msg += "Erreur inconnue."; }
+                    lyricsContainer.innerHTML = `<p class='info-text error-text'>${msg}<br>Fichier: ${currentSongData ? currentSongData.filePath : 'N/A'}</p>`;
+                    playButton.disabled = true; playButton.textContent = "Erreur";
+                    [rewind10Button, rewind5Button, rewind3Button, forward3Button, forward5Button, forward10Button, revealButton, playbackRateSelect].forEach(btn => btn.disabled = true);
+                });
+                localAudioPlayer.addEventListener('timeupdate', checkEndTimeAndSyncLyrics);
+            } else {
+                console.error("FATAL: Élément <audio id='local-audio-player'> non trouvé!");
+            }
+            window.addEventListener('keydown', handleSpacebar);
+        });
+    </script>
+
+</body>
+</html>
