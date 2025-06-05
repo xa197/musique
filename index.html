@@ -138,8 +138,8 @@
         const songsData = [
           { 
             id: "shapeofyou-refrain", title: "Shape of You (Refrain)", artist: "Ed Sheeran",
-            // CORRECTION: URL pointant vers la branche "main"
-            filePath: "https://raw.githubusercontent.com/xa197/musique/main/Ed%20Sheeran%20-%20Shape%20of%20You%20(Official%20Music%20Video).mp3", 
+            // NOUVELLE SOLUTION : Utilisation de jsDelivr pour servir le fichier correctement
+            filePath: "https://cdn.jsdelivr.net/gh/xa197/musique@main/Ed%20Sheeran%20-%20Shape%20of%20You%20(Official%20Music%20Video).mp3", 
             startTime: 48, 
             endTime: 75,   
             lyrics: [ 
@@ -157,8 +157,8 @@
             id: "badliar-imaginedragons",
             title: "Bad Liar (Verset 1 & Refrain 1)",
             artist: "Imagine Dragons",
-            // CORRECTION: URL pointant vers la branche "main"
-            filePath: "https://raw.githubusercontent.com/xa197/musique/main/Imagine%20Dragons%20-%20Bad%20Liar.mp3",
+            // NOUVELLE SOLUTION : Utilisation de jsDelivr pour servir le fichier correctement
+            filePath: "https://cdn.jsdelivr.net/gh/xa197/musique@main/Imagine%20Dragons%20-%20Bad%20Liar.mp3",
             startTime: 11,
             endTime: 54,
             lyrics: [
@@ -177,6 +177,8 @@
             ]
           }
         ];
+
+        // ... Le reste du JavaScript reste identique ...
 
         let currentSongId = null;
         let currentSongData = null;
