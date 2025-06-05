@@ -138,7 +138,7 @@
         const songsData = [
           { 
             id: "shapeofyou-refrain", title: "Shape of You (Refrain)", artist: "Ed Sheeran",
-            // IMPORTANT: Assurez-vous que ce nom de fichier correspond EXACTEMENT au fichier sur GitHub
+            // IMPORTANT: Assurez-vous que ce nom de fichier correspond EXACTEMENT au fichier MP3.
             filePath: "Ed Sheeran - Shape of You (Official Music Video).mp3", 
             startTime: 48, 
             endTime: 75,   
@@ -153,14 +153,30 @@
               { time: 21.0, words: ["I'm", "in", "love", "with", "your", "body"], translation: "Je suis amoureux de ton corps" }
             ]
           },
-          /* D'autres chansons peuvent être ajoutées ici plus tard
-           {
-             id: "perfect-edsheeran", title: "Perfect (Couplet 1 & Refrain 1)", artist: "Ed Sheeran",
-             filePath: "perfect.mp3", // Exemple de chemin si le fichier est à la racine
-             startTime: 0, endTime: 76, 
-             lyrics: [ // ... ]
-           },
-          */
+          // NOUVELLE CHANSON AJOUTÉE ICI
+          {
+            id: "badliar-imaginedragons",
+            title: "Bad Liar (Verset 1 & Refrain 1)",
+            artist: "Imagine Dragons",
+            // IMPORTANT: Assurez-vous que ce nom de fichier correspond EXACTEMENT au fichier MP3.
+            filePath: "Imagine Dragons - Bad Liar.mp3",
+            startTime: 11,
+            endTime: 54,
+            lyrics: [
+                { time: 0.5,  words: ["Oh,", "hush,", "my", "dear,", "it's", "been", "a", "difficult", "year"], translation: "Oh, chut, ma chère, l'année a été difficile" },
+                { time: 3.5,  words: ["And", "terrors", "don't", "prey", "on", "innocent", "victims"], translation: "Et les terreurs ne s'attaquent pas aux victimes innocentes" },
+                { time: 7.0,  words: ["Trust", "me,", "darlin',", "trust", "me,", "darlin'"], translation: "Fais-moi confiance, chérie, fais-moi confiance" },
+                { time: 11.0, words: ["It's", "been", "a", "loveless", "year"], translation: "Ça a été une année sans amour" },
+                { time: 14.5, words: ["I'm", "a", "man", "of", "three", "fears"], translation: "Je suis un homme de trois peurs" },
+                { time: 17.5, words: ["Integrity,", "faith", "and", "crocodile", "tears"], translation: "L'intégrité, la foi et les larmes de crocodile" },
+                { time: 23.0, words: ["But", "I'm", "a", "bad", "liar,", "bad", "liar"], translation: "Mais je suis un piètre menteur, un piètre menteur" },
+                { time: 27.0, words: ["Now", "you", "know,", "now", "you", "know"], translation: "Maintenant tu sais, maintenant tu sais" },
+                { time: 30.0, words: ["I'm", "a", "bad", "liar,", "bad", "liar"], translation: "Je suis un piètre menteur, un piètre menteur" },
+                { time: 34.0, words: ["Now", "you", "know,", "you're", "free", "to", "go"], translation: "Maintenant tu sais, tu es libre de partir" },
+                { time: 38.0, words: ["So", "look", "me", "in", "the", "eyes,"], translation: "Alors regarde-moi dans les yeux,"},
+                { time: 41.0, words: ["Tell", "me", "what", "you", "see"], translation: "Dis-moi ce que tu vois"}
+            ]
+          }
         ];
 
         let currentSongId = null;
